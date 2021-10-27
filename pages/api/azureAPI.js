@@ -9,7 +9,7 @@ const targetBlobName = "picturecopy.jpeg";
 
 const key = process.env.ACCESS_KEY;
 const strTime = new Date().toUTCString();
-const strToSign = `PUT\n\n\n\n\n\n\n\n\n\n\n\nx-ms-access-tier:Cool\nx-ms-copy-source:${blobUrl}\nx-ms-date:${strTime}\nx-ms-version:2020-10-02\n/${account}/${containerName}/${targetBlobName}`;
+const strToSign = `PUT\n\n\n\n\n\n\n\n\n\n\n\nx-ms-access-tier:Cool\nx-ms-copy-source:${blobUrl}\nx-ms-date:${strTime}\nx-ms-rehydrate-priority:High\nx-ms-version:2020-10-02\n/${account}/${containerName}/${targetBlobName}`;
 
 const secret = CryptoJS.enc.Base64.parse(key);
 const hash = CryptoJS.HmacSHA256(strToSign, secret);
@@ -24,6 +24,7 @@ const putConfig = {
     "x-ms-access-tier": "Cool",
     "x-ms-copy-source": blobUrl,
     "x-ms-date": strTime,
+    "x-ms-rehydrate-priority": "High",
     "x-ms-version": "2020-10-02",
   },
 };

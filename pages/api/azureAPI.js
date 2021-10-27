@@ -2,14 +2,14 @@ require("dotenv").config();
 const CryptoJS = require("crypto-js");
 const account = process.env.ACCOUNT;
 const containerName = process.env.CONTAINER_NAME;
-const blobName = "Logo.png";
+const blobName = "picture.jpeg";
 const blobUrl = `https://${account}.blob.core.windows.net/${containerName}/${blobName}`;
-const targetBlobName = "Logocopy.png";
+const targetBlobName = "picturecopy.jpeg";
 
 
 const key = process.env.ACCESS_KEY;
 const strTime = new Date().toUTCString();
-const strToSign = `PUT\n\n\n\n\n\n\n\n\n\n\n\nx-ms-access-tier:Cool\nx-ms-copy-source:${blobUrl}\nx-ms-date:${strTime}\nx-ms-rehydrate-priority:High\nx-ms-version:2020-10-02\n/${account}/${containerName}/${targetBlobName}\ntimeout:30`;
+const strToSign = `PUT\n\n\n\n\n\n\n\n\n\n\n\nx-ms-access-tier:Cool\nx-ms-copy-source:${blobUrl}\nx-ms-date:${strTime}\nx-ms-version:2020-10-02\n/${account}/${containerName}/${targetBlobName}`;
 
 const secret = CryptoJS.enc.Base64.parse(key);
 const hash = CryptoJS.HmacSHA256(strToSign, secret);
@@ -24,7 +24,6 @@ const putConfig = {
     "x-ms-access-tier": "Cool",
     "x-ms-copy-source": blobUrl,
     "x-ms-date": strTime,
-    "x-ms-rehydrate-priority": "High",
     "x-ms-version": "2020-10-02",
   },
 };
@@ -33,7 +32,7 @@ const controller = async (req, res) => {
   try {
     if (req.method === "POST") {
       const results = await fetch(
-        `https://${account}.blob.core.windows.net/${containerName}/${targetBlobName}?timeout=30`,
+        `https://${account}.blob.core.windows.net/${containerName}/${targetBlobName}`,
         putConfig
       );
       if (results.status === 200) {
